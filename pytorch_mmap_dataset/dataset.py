@@ -40,7 +40,7 @@ class MMAPDataset(Dataset):
 
             if len(inputs) != len(labels):
                 raise Exception(
-                    f"Inputs samples count {len(inputs)} is different than the labels count {len(labels)}"
+                    f"Input samples count {len(inputs)} is different than the labels count {len(labels)}"
                 )
 
             if not isinstance(inputs[0], np.ndarray):
@@ -64,8 +64,8 @@ class MMAPDataset(Dataset):
             self.mmap_inputs[idx][:] = input[:]
             self.mmap_labels[idx][:] = label[:]
 
-        del inputs
-        del labels
+        del input_iter
+        del labels_iter
         gc.collect()
 
     def __getitem__(self, idx: int) -> Tuple[np.ndarray]:

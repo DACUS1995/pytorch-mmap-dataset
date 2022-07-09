@@ -23,8 +23,8 @@ def find_version(*filepath):
 
 
 setup(
-    name="pytorch-mmap-dataset",
-    version=find_version("pytorch-mmap-dataset/__init__.py"),
+    name="pytorch_mmap_dataset",
+    version=find_version("pytorch_mmap_dataset/__init__.py"),
     author="Tudor Surdoiu",
     author_email="studormarian@gmail.com",
     license="MIT",
