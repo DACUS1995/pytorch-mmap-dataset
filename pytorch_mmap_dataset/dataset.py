@@ -86,7 +86,10 @@ class MMAPDataset(Dataset):
                 "Failed to create the path (check the user write permissions)."
             )
 
-    def _init_mmap(self, path: str, dtype: np.dtype, shape: Tuple[int]) -> np.ndarray:
+    def _init_mmap(self, path: str, dtype: np.dtype, shape: Tuple[int], remove_existing: bool = True) -> np.ndarray:
+        if remove_existing and os.path.exists(path):
+            os.remove(path)
+    
         return np.memmap(
             path,
             dtype=dtype,

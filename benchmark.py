@@ -1,4 +1,3 @@
-from logging import root
 from time import time
 import os
 
@@ -29,7 +28,7 @@ class DiskReadDataset(Dataset):
 
 def benchmark_disk_read(root_dir: str = DATASET_ROOT_PATH):
     start_time = time()
-    dataset = DiskReadDataset("./local_test_dir/testSample")
+    dataset = DiskReadDataset(root_dir)
 
     for idx, (image, label) in enumerate(dataset):
         pass
@@ -41,7 +40,7 @@ def benchmark_disk_read(root_dir: str = DATASET_ROOT_PATH):
 def benchmark_in_memory(root_dir: str = DATASET_ROOT_PATH):
     images = []
     labels = []
-    dataset = DiskReadDataset("./local_test_dir/testSample")
+    dataset = DiskReadDataset(root_dir)
 
     for idx, (image, label) in enumerate(dataset):
         images.append(image)
@@ -59,7 +58,7 @@ def benchmark_in_memory(root_dir: str = DATASET_ROOT_PATH):
 def benchmark_mmap(root_dir: str = DATASET_ROOT_PATH):
     images = []
     labels = []
-    dataset = DiskReadDataset("./local_test_dir/testSample")
+    dataset = DiskReadDataset(root_dir)
 
     for idx, (image, label) in enumerate(dataset):
         images.append(image)
