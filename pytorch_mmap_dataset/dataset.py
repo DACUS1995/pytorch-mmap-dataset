@@ -1,9 +1,12 @@
 import gc
 import os
-from typing import Iterable, Tuple
+from typing import Any, Callable, Iterable, List, Tuple, Union
 
 import numpy as np
 from torch.utils.data.dataset import Dataset
+from torchvision import transforms
+import torch
+
 
 DEFAULT_INPUT_FILE_NAME = "input.data"
 DEFAULT_LABELS_FILE_NAME = "labels.data"
@@ -16,11 +19,13 @@ class MMAPDataset(Dataset):
         labels_iter: Iterable[np.ndarray],
         mmap_path: str = None,
         size: int = None,
+        transform_fn: Callable[..., Any] = None
     ) -> None:
         super().__init__()
 
         self.mmap_inputs: np.ndarray = None
         self.mmap_labels: np.ndarray = None
+        self.transform_fn = transform_fn
 
         if mmap_path is None:
             mmap_path = os.path.abspath(os.getcwd())
@@ -68,7 +73,9 @@ class MMAPDataset(Dataset):
         del labels_iter
         gc.collect()
 
-    def __getitem__(self, idx: int) -> Tuple[np.ndarray]:
+    def __getitem__(self, idx: int) -> Tuple[Union[np.ndarray, torch.Tensor]]:
+        if self.transform_fn:
+            return self.transform_fn(self.mmap_inputs[idx]), torch.tensor(self.mmap_labels[idx]) 
         return self.mmap_inputs[idx], self.mmap_labels[idx]
 
     def __len__(self) -> int:
