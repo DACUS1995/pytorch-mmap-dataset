@@ -28,6 +28,11 @@ for idx, (input, label) in enumerate(dataset):
     # The model goes brrr
 ```
 
+If you want to apply some transformations when iterating, you can put them in a wrapper function and provide it to the dataset:
+```
+dataset = MMAPDataset(image_iter(), image_iter(), size=size_dataset, transform_fn=lambda x: torch.tensor(x))
+```
+
 ---
 
 For a benchmark comparing a normally reading dataset, an in-memory dataset and mmap dataset you can check/run the `benchmark.py` file.

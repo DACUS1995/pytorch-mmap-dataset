@@ -102,17 +102,14 @@ class MMAPDataset(Dataset):
 
 
     def _init_mmap(self, path: str, dtype: np.dtype, shape: Tuple[int], remove_existing: bool = False) -> np.ndarray:
+        open_mode = "r+"
+
         if remove_existing:
-            return np.memmap(
-                path,
-                dtype=dtype,
-                mode="w+",
-                shape=shape,
-            )
-        else:
-            return np.memmap(
-                path,
-                dtype=dtype,
-                mode="r+",
-                shape=shape,
-            )
+            open_mode = "w+"
+        
+        return np.memmap(
+            path,
+            dtype=dtype,
+            mode=open_mode,
+            shape=shape,
+        )
