@@ -27,8 +27,9 @@ class DiskReadDataset(Dataset):
 
 
 def benchmark_disk_read(root_dir: str = DATASET_ROOT_PATH):
-    start_time = time()
     dataset = DiskReadDataset(root_dir)
+    
+    start_time = time()
 
     for idx, (image, label) in enumerate(dataset):
         pass

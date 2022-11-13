@@ -1,8 +1,14 @@
 # pytorch-mmap-dataset
 
-A custom pytorch Dataset extension that provides a faster iteration and better main memory usage when going over a dataset by using a memory mapped file to store amy potential big files that would normally be read on demand.
+A custom pytorch Dataset extension that provides a faster iteration and better RAM usage when going over a dataset by using a memory mapped file to store any potential big files that would normally be read on demand.
 
 ---
+
+### Usage
+Clone the project and just run:
+```
+make install
+```
 
 By using a generic iterable the dataset can support any type of file reading operations when creating the memory mapped file. 
 
@@ -22,6 +28,7 @@ def image_iter(root_path: str = DATASET_ROOT_PATH):
 
 By providing the size argument the files will be read one by one thus avoiding unnecesary memory usage when copying the data in the mmap file.
 ```python
+from pytorch_mmap_dataset import MMAPDataset
 dataset = MMAPDataset(image_iter(), image_iter(), size=size_dataset)
 
 for idx, (input, label) in enumerate(dataset):

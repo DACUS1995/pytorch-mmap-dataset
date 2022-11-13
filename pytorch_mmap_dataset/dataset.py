@@ -20,7 +20,6 @@ class MMAPDataset(Dataset):
         mmap_path: str = None,
         size: int = None,
         transform_fn: Callable[..., Any] = None,
-        
     ) -> None:
         super().__init__()
 

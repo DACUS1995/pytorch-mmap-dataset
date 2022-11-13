@@ -12,11 +12,11 @@ format:
 	black **/*.py
 
 lint: ## [Local development] Run mypy, pylint and black
-	python -m mypy gradflow
-	python -m pylint gradflow
+	python -m mypy pytorch_mmap_dataset
+	python -m pylint pytorch_mmap_dataset
 
 typecheck:
-	python -m mypy gradflow tests
+	python -m mypy pytorch_mmap_dataset tests
 
 test:
 	python -m unittest
