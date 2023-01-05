@@ -72,7 +72,7 @@ class MMAPDataset(Dataset):
         inputs = []
         labels = []
 
-        for idx, (input, label) in enumerate(zip(input_iter, labels_iter)):
+        for input, label in zip(input_iter, labels_iter):
             inputs.append(input)
             labels.append(label)
 
@@ -101,11 +101,7 @@ class MMAPDataset(Dataset):
 
 
     def _init_mmap(self, path: str, dtype: np.dtype, shape: Tuple[int], remove_existing: bool = False) -> np.ndarray:
-        open_mode = "r+"
-
-        if remove_existing:
-            open_mode = "w+"
-        
+        open_mode = "w+" if remove_existing else "r+"
         return np.memmap(
             path,
             dtype=dtype,

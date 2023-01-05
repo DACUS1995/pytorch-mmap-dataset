@@ -28,11 +28,8 @@ class DiskReadDataset(Dataset):
 
 def benchmark_disk_read(root_dir: str = DATASET_ROOT_PATH):
     dataset = DiskReadDataset(root_dir)
-    
-    start_time = time()
 
-    for idx, (image, label) in enumerate(dataset):
-        pass
+    start_time = time()
 
     duration = time() - start_time
     print(f"Disk read benchmark: {duration} seconds")
@@ -43,14 +40,11 @@ def benchmark_in_memory(root_dir: str = DATASET_ROOT_PATH):
     labels = []
     dataset = DiskReadDataset(root_dir)
 
-    for idx, (image, label) in enumerate(dataset):
+    for image, label in dataset:
         images.append(image)
         labels.append(label)
-    
-    start_time = time()
 
-    for idx, (image, label) in enumerate(zip(images, labels)):
-        pass
+    start_time = time()
 
     duration = time() - start_time
     print(f"In memory benchmark: {duration} seconds")
@@ -61,16 +55,13 @@ def benchmark_mmap(root_dir: str = DATASET_ROOT_PATH):
     labels = []
     dataset = DiskReadDataset(root_dir)
 
-    for idx, (image, label) in enumerate(dataset):
+    for image, label in dataset:
         images.append(image)
         labels.append(label)
 
     dataset = MMAPDataset(images, labels, size=len(dataset))
 
     start_time = time()
-
-    for idx, (image, label) in enumerate(dataset):
-        pass
 
     duration = time() - start_time
     print(f"MMAP benchmark: {duration} seconds")

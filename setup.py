@@ -14,11 +14,10 @@ with open("requirements.txt", encoding="utf8") as file:
 def find_version(*filepath):
     here = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(here, *filepath)) as fp:
-        version_match = re.search(
+        if version_match := re.search(
             r"^__version__ = ['\"]([^'\"]*)['\"]", fp.read(), re.M
-        )
-        if version_match:
-            return version_match.group(1)
+        ):
+            return version_match[1]
         raise RuntimeError("Unable to find version string.")
 
 
