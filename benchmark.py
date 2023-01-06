@@ -30,6 +30,9 @@ def benchmark_disk_read(root_dir: str = DATASET_ROOT_PATH):
     dataset = DiskReadDataset(root_dir)
 
     start_time = time()
+    
+    for image, label in zip(images, labels):
+        pass
 
     duration = time() - start_time
     print(f"Disk read benchmark: {duration} seconds")
@@ -45,6 +48,9 @@ def benchmark_in_memory(root_dir: str = DATASET_ROOT_PATH):
         labels.append(label)
 
     start_time = time()
+    
+    for image, label in zip(images, labels):
+        pass
 
     duration = time() - start_time
     print(f"In memory benchmark: {duration} seconds")
@@ -62,6 +68,9 @@ def benchmark_mmap(root_dir: str = DATASET_ROOT_PATH):
     dataset = MMAPDataset(images, labels, size=len(dataset))
 
     start_time = time()
+    
+    for image, label in zip(images, labels):
+        pass
 
     duration = time() - start_time
     print(f"MMAP benchmark: {duration} seconds")
