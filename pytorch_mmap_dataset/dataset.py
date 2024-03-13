@@ -34,11 +34,11 @@ class MMAPDataset(Dataset):
         self.mmap_input_path = os.path.join(mmap_path, DEFAULT_INPUT_FILE_NAME)
         self.mmap_labels_path = os.path.join(mmap_path, DEFAULT_LABELS_FILE_NAME)
 
-        # If the total size is not known we load the dataset in memory first
+        # If the total size is not known we iterate over the dateset and count
         if size is None:
-            input_iter, labels_iter = self._consume_iterable(input_iter, labels_iter)
-            size = len(input_iter)
+            size = self._count_iterable(input_iter, labels_iter)
 
+        assert size is not None
         self.length = size
 
         for idx, (input, label) in enumerate(zip(input_iter, labels_iter)):
@@ -68,23 +68,13 @@ class MMAPDataset(Dataset):
         return self.length
 
 
-    def _consume_iterable(self, input_iter: Iterable[np.ndarray], labels_iter: Iterable[np.ndarray]) -> Tuple[List[np.ndarray]]:
-        inputs = []
-        labels = []
+    def _count_iterable(self, input_iter: Iterable[np.ndarray], labels_iter: Iterable[np.ndarray]) -> int:
+        inputs_counter = 0
 
-        for input, label in zip(input_iter, labels_iter):
-            inputs.append(input)
-            labels.append(label)
+        for _, _ in zip(input_iter, labels_iter):
+            inputs_counter += 1
 
-        if len(inputs) != len(labels):
-            raise Exception(
-                f"Input samples count {len(inputs)} is different than the labels count {len(labels)}"
-            )
-
-        if not isinstance(inputs[0], np.ndarray):
-            raise TypeError("Inputs and labels must be of type np.ndarray")
-
-        return inputs, labels
+        return inputs_counter
 
 
     def _mkdir(self, path: str) -> None:
