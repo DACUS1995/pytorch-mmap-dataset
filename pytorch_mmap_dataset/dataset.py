@@ -32,7 +32,9 @@ class MMAPDataset(Dataset):
         self._mkdir(mmap_path)
 
         self.mmap_input_path = os.path.join(mmap_path, DEFAULT_INPUT_FILE_NAME)
+        self._mkfile(self.mmap_input_path)
         self.mmap_labels_path = os.path.join(mmap_path, DEFAULT_LABELS_FILE_NAME)
+        self._mkfile(self.mmap_labels_path)
 
         # If the total size is not known we iterate over the dateset and count
         if size is None:
@@ -57,25 +59,25 @@ class MMAPDataset(Dataset):
         del labels_iter
         gc.collect()
 
-
     def __getitem__(self, idx: int) -> Tuple[Union[np.ndarray, torch.Tensor]]:
         if self.transform_fn:
-            return self.transform_fn(self.mmap_inputs[idx]), torch.tensor(self.mmap_labels[idx]) 
+            return self.transform_fn(self.mmap_inputs[idx]), torch.tensor(
+                self.mmap_labels[idx]
+            )
         return self.mmap_inputs[idx], self.mmap_labels[idx]
-
 
     def __len__(self) -> int:
         return self.length
 
-
-    def _count_iterable(self, input_iter: Iterable[np.ndarray], labels_iter: Iterable[np.ndarray]) -> int:
+    def _count_iterable(
+        self, input_iter: Iterable[np.ndarray], labels_iter: Iterable[np.ndarray]
+    ) -> int:
         inputs_counter = 0
 
         for _, _ in zip(input_iter, labels_iter):
             inputs_counter += 1
 
         return inputs_counter
-
 
     def _mkdir(self, path: str) -> None:
         if os.path.exists(path):
@@ -89,8 +91,26 @@ class MMAPDataset(Dataset):
                 "Failed to create the path (check the user write permissions)."
             )
 
+    def _mkfile(self, path: str) -> None:
+        if os.path.exists(path):
+            return
 
-    def _init_mmap(self, path: str, dtype: np.dtype, shape: Tuple[int], remove_existing: bool = False) -> np.ndarray:
+        try:
+            with open(path, "w") as f:
+                f.write("")
+            return
+        except ValueError:
+            raise ValueError(
+                "Failed to create the file (check the user write permissions)."
+            )
+
+    def _init_mmap(
+        self,
+        path: str,
+        dtype: np.dtype,
+        shape: Tuple[int],
+        remove_existing: bool = False,
+    ) -> np.ndarray:
         open_mode = "w+" if remove_existing else "r+"
         return np.memmap(
             path,
